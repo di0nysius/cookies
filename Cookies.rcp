@@ -1,0 +1,76 @@
+Cookies{
+	Weizenmehl mehl = 250g;
+	Backpulver backPulver = 2g; //oder 2g = 1TL
+	Butter<ungesalzen> butter = 170g;
+	Zucker<brauner, weicher> braunerZucker = 170g;
+	Zucker<weisser> weisserZucker = 80g;
+	Vanille vanille = 2 Schoten || 15ml Extrakt;
+	Eier eier[] = Eier[2];
+	Schokolade<weiss> schokolade = 250g;
+	Salz salz = 1 Prise;
+
+	mix1 mittlereSchuessel(butter, braunerZucker, weisserZucker, vanille, eier){
+		geschmolzeneButter = Schmelzel(butter); // nicht heiss werden lassen, darf nur lauwarm werden!
+		mix1 += braunerZucker;
+		mix1 += weisserZucker;
+		mix1 += vanille;
+		mix1 += geschmolzeneButter;
+		mischen(mix1);
+
+		eierMix = kleineSchuessel (eier){
+			eierMix += eier[1];
+			eierMix += eier[2].eigelb;
+			aufschlagen(eierMix);
+		}
+		mix1 += eierMix;
+
+		mischen(mix1);
+
+		return mix1;
+	}
+
+	mix2 groessereSchuessel(mehl, backPulver, salz){
+		mix2 += mehl;
+		mix2 += backPulver;
+		mix2 += salz;
+		mischen(mix2);
+
+		return mix2;
+	}
+
+	Cookies(){
+		mix1 = mittlereSchuessel(butter, braunerZucker, weisserZucker, vanille, eier)
+		mix2 = groessereSchuessel(mehl, backPulver, salz);
+		schokoladenStuecke = zerhacken(schokolade);
+
+		mix2 += mix1;
+		mischenMitMixer(mix2);
+
+		mix2 += schokoladenStuecke;
+		umruehrenMitLoeffel(mix2);
+
+		backblech += wallNussGrosseKugelnFormen(mix2);
+		Cookies = backofen(backblech);
+
+		if (Cookies == fertig){
+			eat(Cookies);
+		}
+	}
+
+	backofen(backblech){
+		if(Backofen.temperatur == 165Grad){
+			backofen += backblech;
+			StartTimer(11Minuten, onBackofenTimerEnded);
+		}
+	}
+
+	onBackofenTimerEnded(backofen){
+		backofen -+ backblech;
+		for (5 Minuten){
+			cookiesAufBackblechAbkuehlenLassen(backblech);
+		}
+		while (Cookies == warm){
+			cookiesAufKuchengitterAbkuehlenLassen(Cookies);
+		}
+	}
+}
